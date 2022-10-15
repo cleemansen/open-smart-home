@@ -1,0 +1,59 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /etc/home-assistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+        # Bluetooth
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+  lms:
+    container_name: lms
+    image: lmscommunity/logitechmediaserver
+    volumes:
+      - /etc/lms/config:/config:rw
+      - /etc/lms/music:/music:ro
+      - /etc/lms/playlist:/playlist:rw
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - 9000:9000/tcp
+      - 9090:9090/tcp
+      - 3483:3483/tcp
+      - 3483:3483/udp
+    restart: unless-stopped
+  squeezelite:
+    image: giof71/squeezelite:latest
+    container_name: squeezelite
+    depends_on: 
+      - "lms"
+    devices:
+      - /dev/snd:/dev/snd
+    environment:
+      #- PRESET=super-amazing-dac,archimago-goldilocks,rates_up_to_384k
+      - SQUEEZELITE_AUDIO_DEVICE=default:CARD=Generic
+      - SQUEEZELITE_NAME=lite
+      - SQUEEZELITE_SERVER_PORT=lms
+      - DISPLAY_PRESETS=N
+    volumes:
+      - /etc/squeezelite/config/additional.conf:/app/assets/additional-presets.conf
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    network_mode: host
+    environment:
+      TZ: 'Europe/Berlin'
+      WEBPASSWORD: '6LQ-cTZc'
+    # Volumes store your data between container upgrades
+    volumes:
+      - '/etc/pihole:/etc/pihole'
+      - '/etc/pihole/dnsmasq.d:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
