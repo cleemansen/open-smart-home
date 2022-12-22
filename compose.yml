@@ -26,7 +26,7 @@ services:
       - 3483:3483/tcp
       - 3483:3483/udp
         # spotty plugin (https://forums.slimdevices.com/showthread.php?113657-Spotty-4-4-6-and-Docker-on-NAS-not-working&p=1004093&viewfull=1#post1004093)
-      - 5353:5353/udp
+        #- 5353:5353/udp
     restart: unless-stopped
   squeezelite:
     image: giof71/squeezelite:latest
