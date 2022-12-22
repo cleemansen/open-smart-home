@@ -44,6 +44,8 @@ services:
     volumes:
       - ./config/squeezelite/config/additional.conf:/app/assets/additional-presets.conf
   adguardhome:
+    profiles:
+      - adguard
     image: adguard/adguardhome
     container_name: adguardhome
     network_mode: host
@@ -51,8 +53,8 @@ services:
       - ./config/adguard/work:/opt/adguardhome/work
       - ./config/adguard/conf:/opt/adguardhome/conf
   pihole:
-    profiles:
-      - pihole
+    #profiles:
+      #- pihole
     container_name: pihole
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
