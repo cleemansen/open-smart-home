@@ -21,10 +21,19 @@
 
 
 :9001 {
+  import cors http://thin.unividuell.org:9002
+  reverse_proxy lms:9000
+  log {
+    output file /var/log/caddy/9001-access.log
+    format console
+  }
+}
+
+:9011 {
   import cors http://localhost:3000
   reverse_proxy lms:9000
   log {
-    output file /var/log/caddy/lms-cometd:9001-access.logi
+    output file /var/log/caddy/9011-access.log
     format console
   }
 }

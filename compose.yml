@@ -43,6 +43,14 @@ services:
       - DISPLAY_PRESETS=N
     volumes:
       - ./config/squeezelite/config/additional.conf:/app/assets/additional-presets.conf
+  candle:
+    container_name: candle
+    image: ghcr.io/unividuell/candle
+    depends_on:
+      - lms
+    ports:
+      - 9002:8080
+    restart: unless-stopped
   adguardhome:
     profiles:
       - adguard
@@ -53,8 +61,6 @@ services:
       - ./config/adguard/work:/opt/adguardhome/work
       - ./config/adguard/conf:/opt/adguardhome/conf
   pihole:
-    #profiles:
-      #- pihole
     container_name: pihole
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
@@ -70,3 +76,15 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
+  caddy:
+    image: caddy/caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - 9001:9001
+      - 9011:9011
+    volumes:
+      - $PWD/data:/data
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/log:/var/log
+
