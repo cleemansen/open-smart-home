@@ -82,6 +82,7 @@ services:
     restart: unless-stopped
     ports:
       - 9001:9001
+      - 9003:9003  
       - 9011:9011
     volumes:
       - $PWD/data:/data
