@@ -36,11 +36,11 @@
 :8000 {
   root * /srv/welcome
 
-  file_server browse
+  file_server
   templates
-  #encode gzip
+  encode gzip
   
-  #try_files {path}.html {path}
+  try_files {path}.html {path}
 
   log {
     output file /var/log/8000-access.log
