@@ -43,6 +43,7 @@ services:
       - DISPLAY_PRESETS=N
     volumes:
       - ./config/squeezelite/config/additional.conf:/app/assets/additional-presets.conf
+    restart: unless-stopped
   candle:
     container_name: candle
     image: ghcr.io/unividuell/candle
