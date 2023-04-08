@@ -1,0 +1,25 @@
+#{{$pathParts := splitList "/" .OriginalReq.URL.Path}}
+#{{$markdownFilename := default "index" (slice $pathParts 2 | join "/")}}
+#{{$markdownFilePath := printf "/markdown/%s.md" $markdownFilename}}
+#{{if not (fileExists $markdownFilePath)}}{{httpError 404}}{{end}}
+#{{$markdownFile := (include $markdownFilePath | splitFrontMatter)}}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Open Smart Home</title>
+	</head>
+	<body>
+		<main>
+			<div class="article-container">
+				<div class="paper" id="paper1"></div>
+				<div class="paper" id="paper2"></div>
+				<div class="paper paper3">
+					<article>{{$pathParts}}</article>
+					<article>{{markdown $markdownFile.Body}}</article>
+				</div>
+			</div>
+			<div class="sidebar"></div>
+		</main>
+	</body>
+</html>
+
