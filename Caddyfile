@@ -33,6 +33,7 @@
   }
 }
 
+# kudos: https://github.com/caddyserver/website/blob/master/Caddyfile
 :8000 {
   root * /srv/welcome
 
@@ -41,6 +42,8 @@
   encode gzip
   
   try_files {path}.html {path}
+
+  rewrite /docs/* /docs/index.html
 
   log {
     output file /var/log/8000-access.log
