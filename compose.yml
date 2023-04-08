@@ -58,8 +58,9 @@ services:
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     network_mode: host
     environment:
-      TZ: 'Europe/Berlin'
-      WEBPASSWORD: '6LQ-cTZc'
+      - TZ=Europe/Berlin
+      - WEBPASSWORD=6LQ-cTZc
+      - FTLCONF_LOCAL_IPV4=192.168.0.100
     # Volumes store your data between container upgrades
     volumes:
       - ./config/pihole:/etc/pihole
@@ -69,15 +70,19 @@ services:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
   caddy:
-    image: caddy/caddy:2-alpine
+    image: caddy:2
     container_name: caddy
     restart: unless-stopped
     ports:
+      - 8000:8000 # welcome
+      - 8008:8008 # up?
       - 9001:9001
-      - 9003:9003  
-      - 9011:9011
     volumes:
-      - $PWD/data:/data
+      - caddy_data:/data
       - $PWD/Caddyfile:/etc/caddy/Caddyfile
-      - $PWD/log:/var/log
+      - $PWD/caddy/log:/var/log
+      - $PWD/caddy/welcome:/srv/welcome
 
+volumes:
+  caddy_data:
+    external: true

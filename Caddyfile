@@ -27,5 +27,30 @@
   reverse_proxy /cometd/* lms:9000
   # the vue app (candle). Notice: docker compose networking -> always use container port (and not mapped host port!)
   reverse_proxy * candle:8080
+
+  log {
+    output file /var/log/9001-access.log
+  }
 }
 
+:8000 {
+  root * /srv/welcome
+
+  file_server browse
+  templates
+  #encode gzip
+  
+  #try_files {path}.html {path}
+
+  log {
+    output file /var/log/8000-access.log
+  }
+}
+
+:8008 {
+  respond "It works!"
+
+  log {
+    output file /var/log/8008-access.log
+  }
+}
