@@ -23,13 +23,13 @@
 
 # home-assistant
 
-1. `docker pull ghcr.io/home-assistant/home-assistant:stable` (if failing: `docker logout ghcr.io`
+1. `docker pull ghcr.io/home-assistant/home-assistant:stable` (if failing: `docker logout ghcr.io`)
 1. `docker rm -f home-assistant`
 1. docker compose up -d`
 
 # candle
 
-0. it is a private docker repository. you have to do the github login by classic tocken first
+0. it is a private docker repository. you have to do the github login by classic token first
 1. `docker pull ghcr.io/unividuell/candle`
 1. `docker rm -f candle`
 1. `docker compose up -d`
