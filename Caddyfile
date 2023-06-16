@@ -25,6 +25,7 @@
   import cors http://localhost:3000 # {scheme}://{hostport}
   # the cometd endpoint of LMS
   reverse_proxy /cometd/* lms:9000
+  reverse_proxy /imageproxy/* lms:9000
   # the vue app (candle). Notice: docker compose networking -> always use container port (and not mapped host port!)
   reverse_proxy * candle:8080
 
