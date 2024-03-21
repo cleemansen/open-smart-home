@@ -1,6 +1,6 @@
 version: '3'
 services:
-  homeassistant:
+  home-assistant:
     container_name: home-assistant
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
@@ -41,6 +41,9 @@ services:
       - SQUEEZELITE_NAME=lite
       - SQUEEZELITE_SERVER_PORT=lms
       - DISPLAY_PRESETS=N
+      # random generated but stable
+      - SQUEEZELITE_MAC_ADDRESS=67:87:13:14:da:fe
+      - DISABLE_MAC_ADDRESS_GENERATION=yes
     volumes:
       - ./config/squeezelite/config/additional.conf:/app/assets/additional-presets.conf
     restart: unless-stopped
