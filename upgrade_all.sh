@@ -3,7 +3,8 @@
 set -x # prints out every line ot the script as it executes, with all variables expanded
 
 # pull current images
-docker pull caddy:2 pihole/pihole
+docker pull caddy:2
+docker pull pihole/pihole:latest
 docker pull lmscommunity/logitechmediaserver 
 docker pull giof71/squeezelite 
 docker pull ghcr.io/home-assistant/home-assistant:stable
