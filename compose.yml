@@ -1,4 +1,3 @@
-version: '3'
 services:
   home-assistant:
     container_name: home-assistant
@@ -11,7 +10,28 @@ services:
     restart: unless-stopped
     privileged: true
     network_mode: host
+  music-assistant-server:
+    image: ghcr.io/music-assistant/server:beta
+    container_name: music-assistant-server
+    restart: unless-stopped
+    # Network mode must be set to host for MA to work correctly
+    network_mode: host
+    volumes:
+      - ./config/music-assistant-server/data:/data/
+    # privileged caps (and security-opt) needed to mount smb folders within the container
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    security_opt:
+      - apparmor:unconfined
+    environment:
+      # Provide logging level as environment variable.
+      # default=info, possible=(critical, error, warning, info, debug)
+      - LOG_LEVEL=info
   lms:
+    profiles:
+      # we exchanged the LMS by music-assistant at 2024-12
+      - disabled
     container_name: lms
     image: lmscommunity/logitechmediaserver
     volumes:
@@ -29,17 +49,17 @@ services:
         #- 5353:5353/udp
     restart: unless-stopped
   squeezelite:
-    image: giof71/squeezelite:latest
+    image: giof71/squeezelite:daily-debian-full-squeezelite-current-sourceforge
     container_name: squeezelite
     depends_on: 
-      - "lms"
+      - music-assistant-server
     devices:
       - /dev/snd:/dev/snd
     environment:
       #- PRESET=super-amazing-dac,archimago-goldilocks,rates_up_to_384k
       - SQUEEZELITE_AUDIO_DEVICE=default:CARD=Generic
       - SQUEEZELITE_NAME=lite
-      - SQUEEZELITE_SERVER_PORT=lms
+      - SQUEEZELITE_SERVER_PORT=music-assistant-server
       - DISPLAY_PRESETS=N
       # random generated but stable
       - SQUEEZELITE_MAC_ADDRESS=67:87:13:14:da:fe
@@ -51,7 +71,7 @@ services:
     container_name: candle
     image: ghcr.io/unividuell/candle
     depends_on:
-      - lms
+      - music-assistant-server
     ports:
       - 9002:8080
     restart: unless-stopped
