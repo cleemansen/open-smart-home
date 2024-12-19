@@ -4,13 +4,14 @@ set -x # prints out every line ot the script as it executes, with all variables 
 
 # pull current images
 docker pull caddy:2
+docker pull ghcr.io/unividuell/candle:ha
 docker pull pihole/pihole:latest
 docker pull lmscommunity/logitechmediaserver 
 docker pull giof71/squeezelite:daily-debian-full-squeezelite-current-sourceforge
 docker pull ghcr.io/home-assistant/home-assistant:stable
 docker pull ghcr.io/music-assistant/server:beta
 # remove current container
-docker rm -f caddy pihole lms squeezelite home-assistant music-assistant-server
+docker rm -f caddy candle pihole lms squeezelite home-assistant music-assistant-server
 # restart
 docker compose up -d
 # houeskeeping

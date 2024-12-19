@@ -69,7 +69,7 @@ services:
     restart: unless-stopped
   candle:
     container_name: candle
-    image: ghcr.io/unividuell/candle
+    image: ghcr.io/unividuell/candle:ha
     depends_on:
       - music-assistant-server
     ports:
